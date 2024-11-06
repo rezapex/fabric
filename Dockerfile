@@ -30,12 +30,17 @@ RUN rm -rf /root/.config/fabric && \
     mkdir -p /root/.config/fabric
 COPY ENV /root/.config/fabric/.env
 
+# Copy frontend directory
+COPY frontend /frontend
+
 # Add debug commands
 RUN ls -la /root/.config/fabric/
 
 # Expose port 8080
 EXPOSE 8080
 
-# Run the binary with debug output
-ENTRYPOINT ["/fabric"]
-CMD ["--serve"] 
+# Serve the frontend using a web server
+RUN apk add --no-cache nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /run/nginx
+CMD ["nginx", "-g", "daemon off;"]

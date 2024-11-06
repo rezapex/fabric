@@ -1,0 +1,12 @@
+{
+  "build": {
+    "builder": "Docker",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "command": "docker run -p 8080:8080 fabric-api"
+  },
+  "env": {
+    "RAILWAY_ENVIRONMENT": "production"
+  }
+}
