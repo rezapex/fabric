@@ -3,6 +3,7 @@ package core
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/samber/lo"
@@ -211,5 +212,25 @@ func (o *PluginRegistry) GetChatter(model string, modelContextLength int, stream
 			model, defaultModel, defaultVendor)
 		return
 	}
+	return
+}
+
+func (o *PluginRegistry) SetupNonInteractive() (err error) {
+	// Configure all vendors using environment variables
+	for _, vendor := range o.VendorsAll.Vendors {
+		if vendorErr := vendor.Configure(); vendorErr == nil {
+			o.VendorManager.AddVendors(vendor)
+		}
+	}
+
+	// Configure other plugins using environment variables
+	_ = o.Defaults.Configure()
+	_ = o.PatternsLoader.Configure()
+	_ = o.YouTube.Configure()
+	_ = o.Jina.Configure()
+	_ = o.Language.Configure()
+
+	// Save the environment file
+	err = o.SaveEnvFile()
 	return
 }

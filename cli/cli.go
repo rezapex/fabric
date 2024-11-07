@@ -50,6 +50,12 @@ func Cli(version string) (err error) {
 		return
 	}
 
+	// Check for the --non-interactive-setup flag and call SetupNonInteractive if set
+	if currentFlags.NonInteractiveSetup {
+		err = registry.SetupNonInteractive()
+		return
+	}
+
 	if currentFlags.Serve {
 		err = restapi.Serve(registry, currentFlags.ServeAddress)
 		return

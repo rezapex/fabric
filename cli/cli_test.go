@@ -18,3 +18,12 @@ func TestCli(t *testing.T) {
 	assert.Error(t, err)
 	assert.Equal(t, core.NoSessionPatternUserMessages, err.Error())
 }
+
+func TestNonInteractiveSetup(t *testing.T) {
+	originalArgs := os.Args
+	defer func() { os.Args = originalArgs }()
+
+	os.Args = []string{os.Args[0], "--non-interactive-setup"}
+	err := Cli("test")
+	assert.NoError(t, err)
+}
